@@ -1,0 +1,182 @@
+[
+  {
+    "id": "T001",
+    "question": "I'm getting 401 errors on every API call even though I just generated a new key.",
+    "resolution": "The customer was including the API key in the URL query string instead of the Authorization header. We guided them to use 'Authorization: Bearer <key>' header format. Issue resolved.",
+    "category": "technical"
+  },
+  {
+    "id": "T002",
+    "question": "My invoice shows a charge I don't recognize from last month.",
+    "resolution": "Reviewed the customer's account. The charge was for an overage on API calls beyond their Pro plan limit. Sent detailed usage breakdown. Customer accepted the explanation.",
+    "category": "billing"
+  },
+  {
+    "id": "T003",
+    "question": "I need to add 5 more team members but I'm getting an error saying I've hit my seat limit.",
+    "resolution": "Customer was on the Pro plan which allows up to 5 seats. Upgraded them to Business plan which supports up to 25 seats. Prorated charge applied.",
+    "category": "account"
+  },
+  {
+    "id": "T004",
+    "question": "Can you add a dark mode to the dashboard?",
+    "resolution": "Logged as a feature request in our roadmap system. Informed customer that dark mode is currently in the 'Exploring' category with 142 upvotes. Directed them to upvote at roadmap.example.com.",
+    "category": "feature_request"
+  },
+  {
+    "id": "T005",
+    "question": "I forgot my password and the reset email never arrives.",
+    "resolution": "Checked logs — reset email was being sent but blocked by customer's corporate email filter (Proofpoint). Advised IT team to whitelist noreply@example.com. Customer resolved.",
+    "category": "account"
+  },
+  {
+    "id": "T006",
+    "question": "Our webhooks stopped firing about 2 hours ago and I can't figure out why.",
+    "resolution": "Customer's endpoint was returning 500 errors, triggering our retry logic. After 5 failed attempts the endpoint was auto-disabled. Re-enabled the endpoint after customer fixed their server. Suggested they set up monitoring on their webhook receiver.",
+    "category": "technical"
+  },
+  {
+    "id": "T007",
+    "question": "We need a full refund for last month — we didn't use the service at all.",
+    "resolution": "Verified through usage logs that the account had zero API calls and no file activity in the billing period. Issued full refund as a goodwill gesture per manager approval. Reminded customer about cancellation process.",
+    "category": "billing"
+  },
+  {
+    "id": "T008",
+    "question": "I accidentally deleted a project with important files. Can you recover it?",
+    "resolution": "Project was deleted 12 days ago and was still in the Trash (30-day retention). Restored it from Trash for the customer via admin panel. Educated customer about the Trash/retention policy.",
+    "category": "account"
+  },
+  {
+    "id": "T009",
+    "question": "Our API calls are working but extremely slow — averaging 8 seconds per request.",
+    "resolution": "Identified customer was making requests from Asia-Pacific but their account was provisioned in the US region. Migrated account to APAC region. Latency dropped to under 200ms.",
+    "category": "technical"
+  },
+  {
+    "id": "T010",
+    "question": "Can you add Salesforce as a native integration?",
+    "resolution": "Directed customer to our Zapier integration which supports Salesforce. Logged a formal feature request for native Salesforce integration. Linked them to the roadmap item which has 89 upvotes.",
+    "category": "feature_request"
+  },
+  {
+    "id": "T011",
+    "question": "We're being charged for seats for users who left our company months ago.",
+    "resolution": "Customer had 6 inactive users still on the team. Walked them through removing inactive members under Settings > Team > Members. Issued a 2-month credit for the excess seats as a courtesy.",
+    "category": "billing"
+  },
+  {
+    "id": "T012",
+    "question": "I'm trying to reset my password but I never receive the SMS verification code.",
+    "resolution": "HISTORICAL RESOLUTION (2022 — STALE): Verified the customer's phone number on file. Found it was missing the country code prefix. Updated the number to include +1. Customer received the SMS and reset successfully. NOTE: This resolution is no longer valid — we deprecated SMS-based password reset in 2023. The current flow sends a magic link to the registered email address only. There is no SMS step.",
+    "category": "account"
+  },
+  {
+    "id": "T013",
+    "question": "We need to sign a Data Processing Agreement for GDPR compliance.",
+    "resolution": "Directed customer to email legal@example.com with their company details. DPA was prepared and signed within 3 business days.",
+    "category": "account"
+  },
+  {
+    "id": "T014",
+    "question": "Our rate limit keeps hitting even though we're well under 60 requests per minute.",
+    "resolution": "Investigated and found the customer had multiple services running in parallel, each counting toward the same API key's limit. Recommended using separate API keys per service or upgrading to Pro. Customer upgraded.",
+    "category": "technical"
+  },
+  {
+    "id": "T015",
+    "question": "Can I export all my data before canceling my account?",
+    "resolution": "Walked customer through Settings > Privacy > Export Data. Explained the 24-hour processing time. Customer received their ZIP archive and then completed account deletion.",
+    "category": "account"
+  },
+  {
+    "id": "T016",
+    "question": "I'm getting 'invalid_scope' errors when trying to use OAuth.",
+    "resolution": "Customer was requesting the 'admin' scope but their OAuth app was only approved for 'read' and 'write'. Updated their OAuth app permissions in the developer console to include 'admin'.",
+    "category": "technical"
+  },
+  {
+    "id": "T017",
+    "question": "We want to pay annually instead of monthly to save money.",
+    "resolution": "Walked customer through Settings > Billing > Billing Cycle > Switch to Annual. They saved 20% ($696/year on Business plan). Explained proration calculation.",
+    "category": "billing"
+  },
+  {
+    "id": "T018",
+    "question": "My 2FA authenticator app was lost with my phone. How do I get back in?",
+    "resolution": "Customer had a backup code from their initial 2FA setup. Used one of their 10 backup codes to authenticate. Set up 2FA on new device. Emphasized saving backup codes in a password manager.",
+    "category": "account"
+  },
+  {
+    "id": "T019",
+    "question": "Files over 500MB fail to upload even though your docs say the limit is 2GB.",
+    "resolution": "Customer was using the legacy v1 upload endpoint which had a 500MB limit. Migrated them to the v2 multipart upload endpoint which supports up to 2GB. Issue resolved.",
+    "category": "technical"
+  },
+  {
+    "id": "T020",
+    "question": "Can you add bulk invite so I don't have to invite team members one at a time?",
+    "resolution": "Informed customer that bulk invite via CSV is available on Business and Enterprise plans under Settings > Team > Members > Import via CSV. Customer was on Pro so they upgraded or can use CSV import on their current tier — confirmed this is a Business+ feature and they upgraded.",
+    "category": "feature_request"
+  },
+  {
+    "id": "T021",
+    "question": "I'm receiving hundreds of emails from your platform that I never signed up for.",
+    "resolution": "Spam/abuse case. Investigated and found someone used this email to create an account without authorization. Deleted the account, blocked the associated IP, and added the customer's email to a protected list.",
+    "category": "spam"
+  },
+  {
+    "id": "T022",
+    "question": "Our service went down because of a 503 error from your API for 45 minutes. We need an incident report.",
+    "resolution": "Confirmed the outage via status.example.com logs. Issued a formal incident report (PDF) including root cause (database failover), timeline, and remediation steps. Applied SLA credit per Enterprise agreement.",
+    "category": "technical"
+  },
+  {
+    "id": "T023",
+    "question": "A team member is sending abusive messages through our shared workspace to other members.",
+    "resolution": "Treated as abuse report. Escalated to Trust & Safety team. Account suspended pending investigation. Advised the reporter to document incidents. Trust & Safety resolved within 24 hours.",
+    "category": "spam"
+  },
+  {
+    "id": "T024",
+    "question": "I was double-charged in the same month.",
+    "resolution": "Investigated — customer had two active subscriptions: a legacy grandfathered plan and a new plan they created. Merged accounts, refunded the duplicate charge, and applied the better plan going forward.",
+    "category": "billing"
+  },
+  {
+    "id": "T025",
+    "question": "Can you add the ability to schedule API calls for a specific time?",
+    "resolution": "Logged as feature request. Explained that our webhooks + serverless function approach can achieve scheduling today. Linked to a community tutorial on using our webhooks with AWS EventBridge for scheduled API calls.",
+    "category": "feature_request"
+  },
+  {
+    "id": "T026",
+    "question": "I can't log in — it says my account is suspended but I didn't miss any payments.",
+    "resolution": "Found the account was suspended by automated fraud detection due to login attempts from 12 different countries in 24 hours. Confirmed with customer it was them (traveling). Cleared the suspension, added travel note to account.",
+    "category": "account"
+  },
+  {
+    "id": "T027",
+    "question": "Is there a way to get notified when a specific API endpoint goes down?",
+    "resolution": "Directed customer to status.example.com where they can subscribe to notifications per-component by email, Slack, or SMS. Customer set up Slack notifications.",
+    "category": "feature_request"
+  },
+  {
+    "id": "T028",
+    "question": "Someone is using our company name and logo in their profile on your platform.",
+    "resolution": "Received DMCA takedown request via proper channel. Trust & Safety verified the complaint, removed the infringing content within 48 hours, and notified the offending account.",
+    "category": "spam"
+  },
+  {
+    "id": "T029",
+    "question": "My API key keeps getting revoked automatically every few days.",
+    "resolution": "Customer had auto-rotation enabled (90-day default, but they had set it to 3 days by mistake). Adjusted rotation interval to 90 days under Settings > API Keys > [key] > Rotation Settings.",
+    "category": "technical"
+  },
+  {
+    "id": "T030",
+    "question": "We need to move our account data from the US region to the EU region for compliance.",
+    "resolution": "Coordinated with engineering for a manual region migration (self-service not available). Scheduled 2-hour maintenance window. Migrated all data to EU-West region. Customer verified all services operational. Process took 1 week total.",
+    "category": "account"
+  }
+]
