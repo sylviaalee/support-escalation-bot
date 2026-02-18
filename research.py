@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "kb"))
 from build_kb import VectorStore  # noqa: E402
 
 # Retry loop parameters — must match orchestrator expectations
-SIMILARITY_THRESHOLD = 0.5   # minimum cosine score to count as a strong match
+SIMILARITY_THRESHOLD = 0.7   # minimum cosine score to count as a strong match
 MIN_STRONG_MATCHES   = 2     # need at least this many strong matches to skip retry
 
 
