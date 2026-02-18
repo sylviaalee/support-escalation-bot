@@ -1,0 +1,410 @@
+
+───────────────────────────────────────────────────────
+  Ticket TEST001 | Unexpected charge on my credit card
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=billing | priority=medium | spam=False
+       reasoning: This is an unauthorized billing charge of $49, which is below the $500 threshold for high priority, and while it requires prompt attention, it does not represent a production or access emergency.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=True
+  [3/3] Drafting reply...
+       sources_used=[]
+
+════════════════════════════════════════════════════════════
+  TEST001 | Unexpected charge on my credit card
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | billing | This is an unauthorized billing charge of $49, which is below the $500 threshold for high priority, and while it requires prompt attention, it does not represent a production or access emergency.
+  RESEARCH 3 match(es) | terms: ['Unexpected', 'charge', 'on', 'my', 'credit', 'card']
+  DRAFT    sources=[]
+
+  Thank you for reaching out regarding the unexpected charge on your credit card. I understand how concerning this can be.
+  
+  To assist you further, could you please confirm if you have checked your account for any active subscriptions? Sometimes, charges can occur due to multiple accounts or subscriptions. 
+  
+  If you find that you still believe this charge is incorrect, I can escalate this issue for a review and potential refund. Please let me know how you would like to proceed.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST002 | API returning 500 errors on all endpoints
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=technical | priority=urgent | spam=False
+       reasoning: Production system is completely down with all API endpoints failing, directly impacting paying customers' ability to use the product.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "API 500 error API integration issues API troubleshooting"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "API 500 error resolution API call troubleshooting server error handling"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['faq-error_codes_reference']
+
+════════════════════════════════════════════════════════════
+  TEST002 | API returning 500 errors on all endpoints
+════════════════════════════════════════════════════════════
+  TRIAGE   🔴 URGENT | technical | Production system is completely down with all API endpoints failing, directly impacting paying customers' ability to use the product.
+  RESEARCH 3 match(es) | terms: ['API', '500', 'error', 'resolution', 'API', 'call'] | 2 retry(s)
+  DRAFT    sources=['faq-error_codes_reference']
+
+  I understand the urgency of your situation with the API returning 500 Internal Server Errors. This indicates a server-side issue. 
+  
+  Here are some steps you can take:
+  1. Retry the API requests with a backoff strategy to see if the issue resolves itself.
+  2. Check the service status at status.example.com for any ongoing incidents that might be affecting the API.
+  3. If the problem persists, please provide any additional details about your API requests, and I can escalate this issue for further investigation.
+  
+  Your production application is important to us, and we want to resolve this as quickly as possible.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST003 | Can't log into my account
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=account | priority=high | spam=False
+       reasoning: User is locked out of their account with a time-sensitive deadline (presentation tomorrow), and the standard password reset mechanism is failing, requiring immediate support intervention.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False | ⚠ stale: ['ticket-T012']
+       ↺ Retry 1/2 | query: "password reset email not received account login issues forgot password help"
+       attempt 2: 3 match(es) | enough=True | ⚠ stale: ['ticket-T012']
+  [3/3] Drafting reply...
+       sources_used=['ticket-T005', 'faq-account_password_reset']
+
+════════════════════════════════════════════════════════════
+  TEST003 | Can't log into my account
+════════════════════════════════════════════════════════════
+  TRIAGE   🟠 HIGH | account | User is locked out of their account with a time-sensitive deadline (presentation tomorrow), and the standard password reset mechanism is failing, requiring immediate support intervention.
+  RESEARCH 3 match(es) | terms: ['password', 'reset', 'email', 'not', 'received', 'account'] | ⚠  stale: ['ticket-T012'] | 1 retry(s)
+  DRAFT    sources=['ticket-T005', 'faq-account_password_reset']
+
+  I understand the urgency of your situation with your important presentation tomorrow. 
+  
+  Since you mentioned that the reset email hasn't arrived after multiple attempts, I recommend checking with your IT team to ensure that noreply@example.com is whitelisted in your corporate email filter. This can help ensure that the reset email is not being blocked. 
+  
+  Additionally, please double-check your spam folder one more time, as sometimes these emails can end up there. 
+  
+  If you're still having trouble, please let me know, and I can escalate this issue for further assistance.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST004 | How do I download my invoice?
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=billing | priority=low | spam=False
+       reasoning: This is a straightforward how-to question about locating invoices, with no indication of a billing error or urgent deadline.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "download invoice invoice history billing statements"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "download invoice invoice history billing statement"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['faq-billing_and_invoices']
+
+════════════════════════════════════════════════════════════
+  TEST004 | How do I download my invoice?
+════════════════════════════════════════════════════════════
+  TRIAGE   🟢 LOW | billing | This is a straightforward how-to question about locating invoices, with no indication of a billing error or urgent deadline.
+  RESEARCH 3 match(es) | terms: ['download', 'invoice', 'invoice', 'history', 'billing', 'statement'] | 2 retry(s)
+  DRAFT    sources=['faq-billing_and_invoices']
+
+  To download your invoice, please follow these steps:
+  1. Go to Settings.
+  2. Click on Billing.
+  3. Select Invoice History.
+  
+  From there, you can download your invoice as a PDF or view it online. Additionally, invoices are automatically generated and emailed to your billing email each month. If you have any trouble accessing it, please let me know!
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST005 | Slack integration stopped posting notifications
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=technical | priority=medium | spam=False
+       reasoning: The Slack integration is broken but this is a notification feature degradation rather than core product functionality being down, and the 3-day timeframe suggests no imminent deadline pressure.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "Slack notifications troubleshooting Slack integration issues webhook errors"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "Slack notifications webhook troubleshooting integration issues"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['ticket-T006', 'faq-webhook_configuration']
+
+════════════════════════════════════════════════════════════
+  TEST005 | Slack integration stopped posting notifications
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | technical | The Slack integration is broken but this is a notification feature degradation rather than core product functionality being down, and the 3-day timeframe suggests no imminent deadline pressure.
+  RESEARCH 3 match(es) | terms: ['Slack', 'notifications', 'webhook', 'troubleshooting', 'integration', 'issues'] | 2 retry(s)
+  DRAFT    sources=['ticket-T006', 'faq-webhook_configuration']
+
+  I understand that the Slack integration is crucial for your notifications, and I'm here to help you resolve this issue.
+  
+  1. Please check the delivery logs for any errors related to the Slack integration. You can find these logs under Settings > Integrations > Webhooks.
+  2. Verify that your endpoint is healthy and correctly set up. If there are any issues, fixing them may restore the notifications.
+  3. If the integration still shows as connected but notifications are not being sent, consider re-enabling the integration or checking for any recent changes in your Slack channel settings.
+  
+  If you continue to experience issues, please let me know, and I can escalate this for further investigation.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST006 | EARN $5000 PER WEEK WORKING FROM HOME!!!
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=spam | priority=low | spam=True
+       reasoning: This is a classic work-from-home scam advertisement, not a legitimate support request.
+  ⛔  Spam detected — skipping research and drafting.
+
+
+════════════════════════════════════════════════════════════
+  TEST006 | EARN $5000 PER WEEK WORKING FROM HOME!!!
+════════════════════════════════════════════════════════════
+  TRIAGE   🟢 LOW | spam | This is a classic work-from-home scam advertisement, not a legitimate support request.
+  RESULT   ⛔ Spam — no reply drafted.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST007 | Password reset via SMS not working
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=technical | priority=medium | spam=False
+       reasoning: User is experiencing a broken authentication feature (SMS password reset) but likely has alternative recovery options such as email reset, so this is degraded functionality rather than a complete lockout.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False | ⚠ stale: ['ticket-T012']
+       ↺ Retry 1/2 | query: "SMS password reset issue password reset not receiving SMS password reset email link"
+       attempt 2: 3 match(es) | enough=True | ⚠ stale: ['ticket-T012']
+  [3/3] Drafting reply...
+       sources_used=['faq-account_password_reset', 'ticket-T005'] | ⚠ stale sources used
+
+════════════════════════════════════════════════════════════
+  TEST007 | Password reset via SMS not working
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | technical | User is experiencing a broken authentication feature (SMS password reset) but likely has alternative recovery options such as email reset, so this is degraded functionality rather than a complete lockout.
+  RESEARCH 3 match(es) | terms: ['SMS', 'password', 'reset', 'issue', 'password', 'reset'] | ⚠  stale: ['ticket-T012'] | 1 retry(s)
+  DRAFT    sources=['faq-account_password_reset', 'ticket-T005'] | ⚠  STALE SOURCES — review before sending
+
+  I understand your frustration with the password reset process. Unfortunately, SMS-based password reset has been deprecated as of 2023. The current method for resetting your password involves receiving a magic link sent to your registered email address.
+  
+  Please check your email inbox (and spam/junk folder) for the reset email. If you do not receive it, please let me know, and I can assist you further.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST008 | Request: Add dark mode to the dashboard
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=feature_request | priority=low | spam=False
+       reasoning: This is a feature request for dark mode with no impact on current product functionality or urgent business need.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "dark mode feature request dashboard customization UI themes"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "dark mode feature request dashboard customization UI themes"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['ticket-T004', 'faq-feature_requests_roadmap']
+
+════════════════════════════════════════════════════════════
+  TEST008 | Request: Add dark mode to the dashboard
+════════════════════════════════════════════════════════════
+  TRIAGE   🟢 LOW | feature_request | This is a feature request for dark mode with no impact on current product functionality or urgent business need.
+  RESEARCH 3 match(es) | terms: ['dark', 'mode', 'feature', 'request', 'dashboard', 'customization'] | 2 retry(s)
+  DRAFT    sources=['ticket-T004', 'faq-feature_requests_roadmap']
+
+  Thank you for your suggestion regarding a dark mode for the dashboard. I understand how important this feature can be for long hours of use. 
+  
+  I want to let you know that a similar request has already been logged in our roadmap system and is currently in the 'Exploring' category with 142 upvotes. You can view and upvote this request at roadmap.example.com to help prioritize its development. 
+  
+  If you have any other suggestions or questions, feel free to reach out!
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST009 | CSV export is completely empty
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=technical | priority=medium | spam=False
+       reasoning: CSV export functionality is broken and not returning data, but this is a data export issue with potential workarounds (API, UI viewing) rather than complete loss of access to the data itself.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "CSV export issue empty CSV file data export troubleshooting"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "CSV export issue data export troubleshooting empty CSV file"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['ticket-T015', 'ticket-T019', 'faq-account_deletion']
+
+════════════════════════════════════════════════════════════
+  TEST009 | CSV export is completely empty
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | technical | CSV export functionality is broken and not returning data, but this is a data export issue with potential workarounds (API, UI viewing) rather than complete loss of access to the data itself.
+  RESEARCH 3 match(es) | terms: ['CSV', 'export', 'issue', 'data', 'export', 'troubleshooting'] | 2 retry(s)
+  DRAFT    sources=['ticket-T015', 'ticket-T019', 'faq-account_deletion']
+
+  I understand your concern regarding the empty CSV export. Here are some steps to troubleshoot this issue:
+  
+  1. Please ensure you are navigating to Settings > Privacy > Export Data to initiate the export process.
+  2. Double-check that you have selected the correct data types for export.
+  3. Remember that the export may take up to 24 hours to process. If you attempted the export recently, it might still be in progress.
+  4. If the issue persists after confirming these steps, please let me know, and I can escalate this for further investigation.
+  
+  Thank you for your patience!
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST010 | Wrong currency on my invoice
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=billing | priority=medium | spam=False
+       reasoning: Currency display issue on invoices is causing accounting workflow problems but has a workaround (manual conversion) and does not prevent product usage or involve monetary loss.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "invoice currency issue billing currency change UK billing currency"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "invoice currency issue billing currency change UK billing currency"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['faq-billing_and_invoices']
+
+════════════════════════════════════════════════════════════
+  TEST010 | Wrong currency on my invoice
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | billing | Currency display issue on invoices is causing accounting workflow problems but has a workaround (manual conversion) and does not prevent product usage or involve monetary loss.
+  RESEARCH 3 match(es) | terms: ['invoice', 'currency', 'issue', 'billing', 'currency', 'change'] | 2 retry(s)
+  DRAFT    sources=['faq-billing_and_invoices']
+
+  I understand that having the wrong currency on your invoice can cause issues with your accounting software. 
+  
+  To address this, please check your account settings to ensure your billing currency is set to GBP. You can do this by navigating to Settings > Billing. 
+  
+  If the currency is already set correctly and you are still receiving invoices in USD, please let me know, and I can escalate this issue for further investigation.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST011 | Webhook not triggering on new events
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=technical | priority=medium | spam=False
+       reasoning: Webhook functionality is degraded but not completely blocking the user's operations, and they have been waiting 24 hours which indicates it's not an emergency outage but does need attention.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=True
+  [3/3] Drafting reply...
+       sources_used=['ticket-T006', 'faq-webhook_configuration']
+
+════════════════════════════════════════════════════════════
+  TEST011 | Webhook not triggering on new events
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | technical | Webhook functionality is degraded but not completely blocking the user's operations, and they have been waiting 24 hours which indicates it's not an emergency outage but does need attention.
+  RESEARCH 3 match(es) | terms: ['Webhook', 'not', 'triggering', 'on', 'new', 'events']
+  DRAFT    sources=['ticket-T006', 'faq-webhook_configuration']
+
+  I understand your concern about the webhook not triggering on new events. Here are some steps to troubleshoot the issue:
+  
+  1. **Check Endpoint Accessibility**: Ensure your webhook endpoint is publicly accessible and returns a 200 status code.
+  2. **Review Event Types**: Confirm that you have selected the appropriate event types for your webhook in the dashboard.
+  3. **Delivery Logs**: Check the delivery logs in your dashboard to see if there are any recorded attempts to send events to your endpoint and if there are any errors.
+  4. **Monitoring**: It's recommended to set up monitoring on your webhook receiver to catch any issues early.
+  
+  If everything seems correct and you're still not receiving events, please let me know, and I can escalate this issue for further investigation.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST012 | We'd love to offer you an exclusive partnership op
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=spam | priority=low | spam=True
+       reasoning: This is a classic phishing/scam attempt requesting bank details under the guise of a fake partnership opportunity, not a legitimate support request.
+  ⛔  Spam detected — skipping research and drafting.
+
+
+════════════════════════════════════════════════════════════
+  TEST012 | We'd love to offer you an exclusive partnership opportunity
+════════════════════════════════════════════════════════════
+  TRIAGE   🟢 LOW | spam | This is a classic phishing/scam attempt requesting bank details under the guise of a fake partnership opportunity, not a legitimate support request.
+  RESULT   ⛔ Spam — no reply drafted.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST013 | File uploads failing silently above 50MB
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=technical | priority=medium | spam=False
+       reasoning: This is a reproducible technical bug affecting a specific feature with a clear workaround (using smaller files), but it's not blocking all work or causing data loss.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=False
+       ↺ Retry 1/2 | query: "file upload issues upload limit problems file size restrictions"
+       attempt 2: 3 match(es) | enough=False
+       ↺ Retry 2/2 | query: "file upload issues upload limit problems large file uploads"
+       attempt 3: 3 match(es) | enough=False
+       Max retries reached — drafting with available context.
+  [3/3] Drafting reply...
+       sources_used=['ticket-T019', 'faq-storage_limits']
+
+════════════════════════════════════════════════════════════
+  TEST013 | File uploads failing silently above 50MB
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | technical | This is a reproducible technical bug affecting a specific feature with a clear workaround (using smaller files), but it's not blocking all work or causing data loss.
+  RESEARCH 3 match(es) | terms: ['file', 'upload', 'issues', 'upload', 'limit', 'problems'] | 2 retry(s)
+  DRAFT    sources=['ticket-T019', 'faq-storage_limits']
+
+  I understand that you're experiencing issues with file uploads larger than 50MB. Since files under this size are working fine, let's troubleshoot this step by step:
+  
+  1. **Check File Size**: Ensure that the files you are trying to upload do not exceed the maximum single file upload limit of 2GB.
+  2. **Storage Usage**: Verify your storage usage by navigating to Settings > Storage to ensure you have enough space available.
+  3. **Upload Method**: If you are using an older upload method, consider switching to the v2 multipart upload endpoint, which supports larger files and may resolve your issue.
+  
+  If the problem persists after these checks, please let me know, and I can escalate the issue for further investigation.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST014 | Congratulations! You've been selected for a free i
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=spam | priority=low | spam=True
+       reasoning: This is a classic phishing/scam message attempting to lure recipients with a fake prize offer, not a legitimate support request.
+  ⛔  Spam detected — skipping research and drafting.
+
+
+════════════════════════════════════════════════════════════
+  TEST014 | Congratulations! You've been selected for a free iPhone 15
+════════════════════════════════════════════════════════════
+  TRIAGE   🟢 LOW | spam | This is a classic phishing/scam message attempting to lure recipients with a fake prize offer, not a legitimate support request.
+  RESULT   ⛔ Spam — no reply drafted.
+
+
+───────────────────────────────────────────────────────
+  Ticket TEST015 | GDPR Data Processing Agreement needed
+───────────────────────────────────────────────────────
+  [1/3] Triage...
+       category=account | priority=medium | spam=False
+       reasoning: GDPR compliance and DPA requests are standard account/legal inquiries that don't indicate a technical issue or urgent blocker, but do require attention as they may affect the customer's ability to continue using the service.
+  [2/3] Research...
+       attempt 1: 3 match(es) | enough=True
+  [3/3] Drafting reply...
+       sources_used=['ticket-T013', 'faq-data_privacy_gdpr']
+
+════════════════════════════════════════════════════════════
+  TEST015 | GDPR Data Processing Agreement needed
+════════════════════════════════════════════════════════════
+  TRIAGE   🟡 MEDIUM | account | GDPR compliance and DPA requests are standard account/legal inquiries that don't indicate a technical issue or urgent blocker, but do require attention as they may affect the customer's ability to continue using the service.
+  RESEARCH 3 match(es) | terms: ['GDPR', 'Data', 'Processing', 'Agreement', 'needed', 'Our']
+  DRAFT    sources=['ticket-T013', 'faq-data_privacy_gdpr']
+
+  Thank you for reaching out regarding the GDPR Data Processing Agreement. I understand the importance of this documentation for your legal team.
+  
+  To obtain the DPA, please email legal@example.com with your company details. Our team typically prepares and signs the DPA within 3 business days.
+  
+  Rest assured, our platform is GDPR compliant, and your data is stored in the region you selected at signup.
+  
+  If you have any further questions or need assistance, feel free to ask!
+
+
+════════════════════════════════════════════════════════════
+  SUMMARY: 15 tickets processed
+════════════════════════════════════════════════════════════
+  ⛔ Spam / skipped        : 3
+  ↺  Research retries used : 9
+  ⚠  Stale source warnings : 1

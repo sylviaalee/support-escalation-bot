@@ -4,149 +4,104 @@
     "category": "billing",
     "subject": "Unexpected charge on my credit card",
     "body": "Hi, I noticed a charge of $49 on my credit card from your company that I did not authorize. I have been on the free plan for the past 6 months and have not signed up for any paid plan. Please refund this charge immediately.",
-    "expected_triage": {
-      "category": "billing",
-      "priority": "high"
-    }
+    "expected_triage": { "category": "billing", "priority": "high" }
   },
   {
     "id": "TEST002",
     "category": "technical",
     "subject": "API returning 500 errors on all endpoints",
     "body": "Our integration is completely broken. Every API call is returning 500 Internal Server Error. Started 2 hours ago and is affecting our production application. Paying customers cannot use our product. This is urgent.",
-    "expected_triage": {
-      "category": "technical",
-      "priority": "urgent"
-    }
+    "expected_triage": { "category": "technical", "priority": "urgent" }
   },
   {
     "id": "TEST003",
     "category": "account",
     "subject": "Can't log into my account",
     "body": "I forgot my password and the reset email never arrived. Tried 4 times, checked spam. I have an important presentation tomorrow that requires access to my account.",
-    "expected_triage": {
-      "category": "account",
-      "priority": "high"
-    }
+    "expected_triage": { "category": "account", "priority": "high" }
   },
   {
     "id": "TEST004",
     "category": "billing",
     "subject": "How do I download my invoice?",
     "body": "I need to submit an expense report and need my invoice for last month's subscription. Where can I find it?",
-    "expected_triage": {
-      "category": "billing",
-      "priority": "low"
-    }
+    "expected_triage": { "category": "billing", "priority": "low" }
   },
   {
     "id": "TEST005",
     "category": "technical",
     "subject": "Slack integration stopped posting notifications",
     "body": "Our Slack integration was working fine for months but suddenly stopped posting notifications to our #alerts channel 3 days ago. Integration still shows as connected in the dashboard.",
-    "expected_triage": {
-      "category": "technical",
-      "priority": "medium"
-    }
+    "expected_triage": { "category": "technical", "priority": "medium" }
   },
   {
     "id": "TEST006",
     "category": "spam",
     "subject": "EARN $5000 PER WEEK WORKING FROM HOME!!!",
     "body": "Click here to learn how our proven system makes $5000 per week guaranteed. No experience needed. Limited spots available. ACT NOW!!!",
-    "expected_triage": {
-      "category": "spam",
-      "priority": "low"
-    }
+    "expected_triage": { "category": "spam", "priority": "low" }
   },
   {
     "id": "TEST007",
     "category": "account",
     "subject": "Password reset via SMS not working",
     "body": "I tried to reset my password using the SMS verification option but I'm not receiving any text messages. I've tried 5 times. Is SMS reset still supported?",
-    "expected_triage": {
-      "category": "account",
-      "priority": "medium"
-    }
+    "expected_triage": { "category": "account", "priority": "medium" }
   },
   {
     "id": "TEST008",
     "category": "feature_request",
     "subject": "Request: Add dark mode to the dashboard",
     "body": "I use your product for long hours and the bright white dashboard is straining my eyes. Please add a dark mode option. Many competitors have this feature.",
-    "expected_triage": {
-      "category": "feature_request",
-      "priority": "low"
-    }
+    "expected_triage": { "category": "feature_request", "priority": "low" }
   },
   {
     "id": "TEST009",
     "category": "technical",
     "subject": "CSV export is completely empty",
     "body": "I exported my project data as a CSV but the file only contains the header row and no actual data. I have 200+ entries. Tried multiple times with different date ranges.",
-    "expected_triage": {
-      "category": "technical",
-      "priority": "medium"
-    }
+    "expected_triage": { "category": "technical", "priority": "medium" }
   },
   {
     "id": "TEST010",
     "category": "billing",
     "subject": "Wrong currency on my invoice",
     "body": "My invoices are showing charges in USD but I'm based in the UK and should be billed in GBP. This is causing issues with my company's accounting software.",
-    "expected_triage": {
-      "category": "billing",
-      "priority": "medium"
-    }
+    "expected_triage": { "category": "billing", "priority": "medium" }
   },
   {
     "id": "TEST011",
     "category": "technical",
     "subject": "Webhook not triggering on new events",
     "body": "I set up a webhook endpoint but it's not receiving anything. My endpoint is publicly accessible and returns 200. The webhook shows as active in your dashboard. I've been waiting 24 hours.",
-    "expected_triage": {
-      "category": "technical",
-      "priority": "high"
-    }
+    "expected_triage": { "category": "technical", "priority": "high" }
   },
   {
     "id": "TEST012",
-    "category": "general",
-    "subject": "GDPR Data Processing Agreement needed",
-    "body": "Our legal team needs to know if your platform is GDPR compliant and whether you have a Data Processing Agreement (DPA) we can sign. We are based in Germany and cannot proceed without this documentation.",
-    "expected_triage": {
-      "category": "general",
-      "priority": "medium"
-    }
+    "category": "spam",
+    "subject": "We'd love to offer you an exclusive partnership opportunity",
+    "body": "Dear Sir/Madam, I am writing on behalf of a prestigious investment group. We have identified your company as an ideal partner for a highly lucrative opportunity. Please reply with your bank details to proceed. This offer expires in 48 hours.",
+    "expected_triage": { "category": "spam", "priority": "low" }
   },
   {
     "id": "TEST013",
     "category": "technical",
     "subject": "File uploads failing silently above 50MB",
     "body": "When I upload files larger than 50MB the progress bar completes but the file never appears. Files under 50MB work fine. Happening for a week.",
-    "expected_triage": {
-      "category": "technical",
-      "priority": "medium"
-    }
+    "expected_triage": { "category": "technical", "priority": "medium" }
   },
   {
     "id": "TEST014",
-    "category": "general",
-    "subject": "Does your platform support SAML SSO with Okta?",
-    "body": "We are evaluating your enterprise plan and need to know if you support SAML-based single sign-on with Okta, including JIT provisioning and group-based role mapping.",
-    "expected_triage": {
-      "category": "general",
-      "priority": "medium"
-    }
+    "category": "spam",
+    "subject": "Congratulations! You've been selected for a free iPhone 15",
+    "body": "You are our 1,000,000th visitor! Click the link below to claim your free iPhone 15 Pro Max. Offer valid for 10 minutes only. No purchase necessary. Just verify your shipping address.",
+    "expected_triage": { "category": "spam", "priority": "low" }
   },
   {
     "id": "TEST015",
-    "category": "technical",
-    "subject": "Dashboard maybe slow? Not really sure",
-    "body": "Sometimes the dashboard seems slow? Not sure if it is my internet or the product. Probably fine, just wondering.",
-    "expected_triage": {
-      "category": "technical",
-      "priority": "low"
-    }
+    "category": "general",
+    "subject": "GDPR Data Processing Agreement needed",
+    "body": "Our legal team needs to know if your platform is GDPR compliant and whether you have a Data Processing Agreement (DPA) we can sign. We are based in Germany and cannot proceed without this documentation.",
+    "expected_triage": { "category": "general", "priority": "medium" }
   }
 ]

@@ -8,14 +8,14 @@ Returns a dict matching the spec:
         {
             "source_id":        str,   # e.g. "faq-12" or "ticket-287"
             "content_snippet":  str,   # short excerpt
-            "similarity_score": float, # 0–1 cosine score
+            "similarity_score": float, # 0-1 cosine score
             "source_type":      str    # "faq" | "past_ticket"
         }
     ],
     "search_terms_used": list[str],
 
     # Internal-use fields (not in public spec, used by orchestrator/drafter):
-    "has_enough_info":        bool,
+    "has_enough_info":        bool,   # True when >= 2 non-stale matches score >= 0.7
     "suggested_search_terms": list[str],
     "stale_ids":              list[str]   # source_ids of stale matches
 }
@@ -32,37 +32,36 @@ from openai import OpenAI
 sys.path.insert(0, str(Path(__file__).parent.parent / "kb"))
 from build_kb import VectorStore  # noqa: E402
 
+# Retry loop parameters — must match orchestrator expectations
+SIMILARITY_THRESHOLD = 0.5   # minimum cosine score to count as a strong match
+MIN_STRONG_MATCHES   = 2     # need at least this many strong matches to skip retry
+
 
 SYSTEM_PROMPT = """You are a knowledge-base research agent for a SaaS customer support team.
 
-You are given a support ticket and candidate matches retrieved from the KB.
-Your job is to decide which matches are genuinely helpful for answering this ticket.
+You are given a support ticket and candidate matches retrieved from a vector KB.
+Your job is to summarise each match into a useful content_snippet for the support drafter.
 
-IMPORTANT: Some past ticket resolutions are marked stale=true. If a match is stale,
-still include it in matches but mark it so the drafter can avoid it.
-
-Set has_enough_info=false if:
-- No matches are relevant, OR
-- All relevant matches are stale, OR
-- The top match similarity_score is below 0.55
+IMPORTANT: Some past ticket resolutions are marked stale=true. Include them in your output
+but preserve the stale flag so the drafter knows to avoid them.
 
 Reply with ONLY a JSON object — no prose, no markdown fences:
 {
   "matches": [
     {
-      "source_id": "<e.g. faq-01 or ticket-012>",
+      "source_id": "<copy exactly from the match header>",
       "content_snippet": "<50-80 word excerpt most relevant to the ticket>",
-      "similarity_score": <float 0-1>,
+      "similarity_score": <copy the score float from the match header>,
       "source_type": "<faq|past_ticket>",
       "stale": <true|false>
     }
   ],
-  "search_terms_used": ["<term>"],
-  "has_enough_info": <true|false>,
   "suggested_search_terms": ["<term1>", "<term2>"]
 }
 
-Only populate suggested_search_terms when has_enough_info=false."""
+Populate suggested_search_terms with 2-3 alternative search terms that might find
+better KB matches for this ticket. Always include them — the orchestrator uses them
+if a retry is needed."""
 
 
 def _extract_json(text: str) -> dict:
@@ -81,18 +80,18 @@ def research(
     top_k: int = 3,
 ) -> dict:
     """
-    Query the vector store with the ticket text (or a refined search_query),
-    then ask GPT to assess which matches are useful.
+    Query the vector store, ask GPT to summarise matches, then set has_enough_info
+    based on whether >= MIN_STRONG_MATCHES non-stale results score >= SIMILARITY_THRESHOLD.
 
     ticket must have 'subject' and 'body' keys.
     """
     base_query = f"{ticket.get('subject', '')} {ticket.get('body', '')}".strip()
     query = search_query or base_query
-    search_terms_used = query.split()[:6]  # rough approximation for logging
+    search_terms_used = query.split()[:6]
 
     raw_matches = store.query(query, top_k=top_k)
 
-    # Format matches for the prompt
+    # Format matches for the prompt — pass scores so GPT can copy them faithfully
     matches_text = "\n\n".join(
         f"[Match {i + 1} | source_id={m['metadata'].get('source_id', f'item-{i}')} | "
         f"score={m['score']:.3f} | "
@@ -120,11 +119,19 @@ def research(
 
     result = _extract_json(response.choices[0].message.content)
     result.setdefault("matches", [])
-    result.setdefault("search_terms_used", search_terms_used)
-    result.setdefault("has_enough_info", False)
     result.setdefault("suggested_search_terms", [])
+    result["search_terms_used"] = search_terms_used
 
-    # Build stale_ids for drafter convenience
+    # ── Retry decision: driven by cosine scores, not GPT's opinion ──────────
+    # Count non-stale matches whose similarity_score meets the threshold.
+    # GPT copies scores from the prompt header, so these are the real values.
+    strong = sum(
+        1 for m in result["matches"]
+        if not m.get("stale") and m.get("similarity_score", 0) >= SIMILARITY_THRESHOLD
+    )
+    result["has_enough_info"] = strong >= MIN_STRONG_MATCHES
+
+    # Convenience list for orchestrator logging
     result["stale_ids"] = [
         m["source_id"] for m in result["matches"] if m.get("stale")
     ]

@@ -1,97 +1,128 @@
 """
 kb/build_kb.py
-Reads data/faqs/*.md and data/past_tickets.json, embeds everything,
-and saves to kb/kb_cache.json so the pipeline can load it instantly.
+Reads data/faqs/*.md and data/past_tickets.json, embeds everything via
+OpenAI, and persists to a ChromaDB collection at kb/chroma/.
 
 Run once (or whenever your data changes):
-    python kb/build_kb.py
+    python3 kb/build_kb.py
+    python3 kb/build_kb.py --force   # wipe and rebuild
 """
 
 from __future__ import annotations
-import json
-import math
 import os
 import sys
+import json
 from pathlib import Path
 
 from dotenv import load_dotenv
 from openai import OpenAI
+import chromadb
+from chromadb.config import Settings
 
 load_dotenv()
 
-EMBED_MODEL = "text-embedding-3-small"
-DATA_DIR = Path(__file__).parent / "data"
-FAQS_DIR = DATA_DIR / "faqs"
+EMBED_MODEL  = "text-embedding-3-small"
+DATA_DIR     = Path(__file__).parent / "data"
+FAQS_DIR     = DATA_DIR / "faqs"
 TICKETS_FILE = DATA_DIR / "past_tickets.json"
-CACHE_FILE = Path(__file__).parent / "kb_cache.json"
+CHROMA_DIR   = Path(__file__).parent / "chroma"
+COLLECTION   = "support_kb"
 
 
 # ---------------------------------------------------------------------------
-# Cosine similarity + VectorStore (self-contained so pipeline can import it)
+# VectorStore — wraps ChromaDB with the same .add_batch() / .query() API
+# the rest of the pipeline already expects
 # ---------------------------------------------------------------------------
-
-def cosine_similarity(a: list[float], b: list[float]) -> float:
-    dot = sum(x * y for x, y in zip(a, b))
-    norm_a = math.sqrt(sum(x * x for x in a))
-    norm_b = math.sqrt(sum(x * x for x in b))
-    if norm_a == 0 or norm_b == 0:
-        return 0.0
-    return dot / (norm_a * norm_b)
-
 
 class VectorStore:
-    def __init__(self, client: OpenAI):
-        self._client = client
-        self._records: list[dict] = []
+    def __init__(self, openai_client: OpenAI):
+        self._oai    = openai_client
+        self._client = chromadb.PersistentClient(
+            path=str(CHROMA_DIR),
+            settings=Settings(anonymized_telemetry=False),
+        )
+        self._col = self._client.get_or_create_collection(
+            name=COLLECTION,
+            metadata={"hnsw:space": "cosine"},   # cosine distance
+        )
+
+    # ── write ────────────────────────────────────────────────────────────
 
     def add_batch(self, items: list[tuple[str, dict]]) -> None:
-        """Embed and store a list of (text, metadata) pairs in one API call."""
-        texts = [t for t, _ in items]
-        resp = self._client.embeddings.create(input=texts, model=EMBED_MODEL)
-        for (text, metadata), data in zip(items, resp.data):
-            self._records.append({
-                "text": text,
-                "embedding": data.embedding,
-                "metadata": metadata,
-            })
+        """Embed and upsert a list of (text, metadata) pairs."""
+        texts     = [t for t, _ in items]
+        metadatas = [m for _, m in items]
+
+        resp = self._oai.embeddings.create(input=texts, model=EMBED_MODEL)
+        embeddings = [d.embedding for d in resp.data]
+
+        # Chroma requires string IDs — use source_id from metadata
+        ids = [m["source_id"] for m in metadatas]
+
+        # Chroma metadata values must be str / int / float / bool — cast stale
+        safe_metas = [
+            {k: (str(v) if isinstance(v, bool) else v) for k, v in m.items()}
+            for m in metadatas
+        ]
+
+        self._col.upsert(
+            ids=ids,
+            embeddings=embeddings,
+            documents=texts,
+            metadatas=safe_metas,
+        )
+
+    def wipe(self) -> None:
+        """Delete and recreate the collection."""
+        self._client.delete_collection(COLLECTION)
+        self._col = self._client.get_or_create_collection(
+            name=COLLECTION,
+            metadata={"hnsw:space": "cosine"},
+        )
+
+    # ── read ─────────────────────────────────────────────────────────────
 
     def query(self, query_text: str, top_k: int = 3) -> list[dict]:
-        """Return top_k most similar records by cosine similarity."""
-        if not self._records:
+        """
+        Return top_k results as dicts with keys:
+            text, metadata, score   (score = 1 - chroma_distance, so higher = better)
+        """
+        if len(self) == 0:
             return []
-        q_emb = self._client.embeddings.create(
+
+        q_emb = self._oai.embeddings.create(
             input=query_text, model=EMBED_MODEL
         ).data[0].embedding
-        scored = [
-            {
-                "text": r["text"],
-                "metadata": r["metadata"],
-                "score": cosine_similarity(q_emb, r["embedding"]),
-            }
-            for r in self._records
-        ]
-        scored.sort(key=lambda x: x["score"], reverse=True)
-        return scored[:top_k]
 
-    def save(self, path: Path) -> None:
-        with open(path, "w") as f:
-            json.dump(self._records, f)
-        print(f"  Saved {len(self._records)} records → {path}")
+        results = self._col.query(
+            query_embeddings=[q_emb],
+            n_results=min(top_k, len(self)),
+            include=["documents", "metadatas", "distances"],
+        )
 
-    def load(self, path: Path) -> None:
-        with open(path) as f:
-            self._records = json.load(f)
+        out = []
+        for doc, meta, dist in zip(
+            results["documents"][0],
+            results["metadatas"][0],
+            results["distances"][0],
+        ):
+            # Chroma cosine distance is 1 - similarity; convert back
+            score = 1.0 - dist
+            # Re-cast stale back to bool
+            meta = {**meta, "stale": meta.get("stale") == "True"}
+            out.append({"text": doc, "metadata": meta, "score": score})
+
+        return out
 
     def __len__(self) -> int:
-        return len(self._records)
+        return self._col.count()
 
 
 # ---------------------------------------------------------------------------
-# Loaders
+# Loaders (unchanged from original)
 # ---------------------------------------------------------------------------
 
 def load_faqs() -> list[tuple[str, dict]]:
-    """Read every .md file in data/faqs/ and return (text, metadata) pairs."""
     items = []
     md_files = sorted(FAQS_DIR.glob("*.md"))
     if not md_files:
@@ -103,43 +134,37 @@ def load_faqs() -> list[tuple[str, dict]]:
             text,
             {
                 "source_id": f"faq-{path.stem}",
-                "type": "faq",
-                "source": path.name,
-                # Derive a readable title from the filename
-                "title": path.stem.replace("_", " ").title(),
+                "type":      "faq",
+                "source":    path.name,
+                "title":     path.stem.replace("_", " ").title(),
             },
         ))
     return items
 
 
 def load_past_tickets() -> list[tuple[str, dict]]:
-    """
-    Read data/past_tickets.json.
-    Each ticket has: id, question, resolution, category
-    We embed question + resolution together so retrieval matches on both.
-    """
     with open(TICKETS_FILE, encoding="utf-8") as f:
         tickets = json.load(f)
 
     items = []
     for t in tickets:
-        # Skip stale/outdated resolutions — flag them in metadata but still embed
-        # so the pipeline knows they exist (the research step will see the text)
         text = (
             f"Customer question: {t['question']}\n"
             f"Resolution: {t['resolution']}"
+        )
+        is_stale = (
+            "STALE" in t.get("resolution", "").upper()
+            or "NO LONGER VALID" in t.get("resolution", "").upper()
         )
         items.append((
             text,
             {
                 "source_id": f"ticket-{t['id']}",
-                "type": "past_ticket",
-                "id": t["id"],
-                "category": t["category"],
-                "status": "resolved",
-                # Flag tickets that explicitly say they're stale
-                "stale": "STALE" in t.get("resolution", "").upper()
-                         or "NO LONGER VALID" in t.get("resolution", "").upper(),
+                "type":      "past_ticket",
+                "id":        t["id"],
+                "category":  t["category"],
+                "status":    "resolved",
+                "stale":     is_stale,   # stored as bool, cast to str on upsert
             },
         ))
     return items
@@ -151,13 +176,16 @@ def load_past_tickets() -> list[tuple[str, dict]]:
 
 def build(force: bool = False) -> VectorStore:
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    store = VectorStore(client)
+    store  = VectorStore(client)
 
-    if CACHE_FILE.exists() and not force:
-        print(f"Cache found at {CACHE_FILE} — loading (pass --force to rebuild).")
-        store.load(CACHE_FILE)
-        print(f"Loaded {len(store)} records.\n")
+    if len(store) > 0 and not force:
+        print(f"Chroma collection '{COLLECTION}' already has {len(store)} records.")
+        print("Pass --force to wipe and rebuild.\n")
         return store
+
+    if force and len(store) > 0:
+        print(f"--force: wiping existing {len(store)} records...")
+        store.wipe()
 
     print("Building knowledge base from scratch...\n")
 
@@ -170,16 +198,16 @@ def build(force: bool = False) -> VectorStore:
     print(f"  Found {len(ticket_items)} past tickets in {TICKETS_FILE}")
     stale = sum(1 for _, m in ticket_items if m.get("stale"))
     if stale:
-        print(f"  ⚠  {stale} ticket(s) flagged as stale — still indexed but marked in metadata")
+        print(f"  ⚠  {stale} ticket(s) flagged as stale — indexed but marked")
     if ticket_items:
         store.add_batch(ticket_items)
 
-    print(f"\nTotal records embedded: {len(store)}")
-    store.save(CACHE_FILE)
+    print(f"\nTotal records in Chroma: {len(store)}")
+    print(f"Persisted at: {CHROMA_DIR}\n")
     return store
 
 
 if __name__ == "__main__":
     force = "--force" in sys.argv
     build(force=force)
-    print("\nDone. Run 'python cli.py' to process tickets.")
+    print("Done. Run 'python3 cli.py' to process tickets.")
